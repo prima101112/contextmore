@@ -1,52 +1,73 @@
-# RAG Pipeline API
+# RAG Qdrant Test
 
-This project implements a Retrieval-Augmented Generation (RAG) pipeline using FastAPI, sentence-transformers, and Qdrant.
+A FastAPI application for document embedding and retrieval using Qdrant vector database.
+
+## Prerequisites
+
+- Python 3.8+
+- Qdrant server running locally or accessible via network
+
+## Setup
+
+1. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Create a `.env` file in the root directory with the following content:
+```
+QDRANT_URL=localhost
+QDRANT_PORT=6333
+QDRANT_COLLECTION_NAME=documents
+```
+
+## Running the Application
+
+1. Make sure Qdrant server is running. If not, you can run it using Docker:
+```bash
+docker run -p 6333:6333 qdrant/qdrant
+```
+
+2. Start the FastAPI application:
+```bash
+uvicorn app.main:app --reload
+```
+
+3. Access the application at http://localhost:8000
+
+## API Endpoints
+
+- `GET /`: Home page
+- `GET /embed`: Embed documents page
+- `GET /retrieve`: Retrieve information page
+- `POST /embed`: Embed a document from a URL
+- `POST /retrieve`: Retrieve information based on a query
+
+## Project Structure
+
+```
+app/
+├── main.py              # FastAPI application entry point
+├── config/
+│   └── settings.py      # Configuration settings
+├── models/
+│   └── schemas.py       # Pydantic models
+├── services/
+│   ├── qdrant_service.py # Qdrant database operations
+│   └── text_service.py   # Text processing operations
+└── utils/
+```
 
 ## Features
 
 - **Embed Documents**: Accepts a URL, extracts text, chunks it, and stores embeddings in Qdrant.
 - **Retrieve Documents**: Retrieves relevant document chunks based on a query.
-
-## Setup
-
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Start Qdrant**:
-   Ensure Qdrant is running locally on port 6333. You can start it using Docker:
-   ```bash
-   docker run -p 6333:6333 qdrant/qdrant
-   ```
-
-3. **Run the FastAPI Application**:
-   ```bash
-   uvicorn main:app --reload
-   ```
-
-## API Endpoints
-
-### Embed Documents
-- **Endpoint**: `/embed`
-- **Method**: POST
-- **Body**:
-  ```json
-  {
-    "url": "https://example.com"
-  }
-  ```
-
-### Retrieve Documents
-- **Endpoint**: `/retrieve`
-- **Method**: POST
-- **Body**:
-  ```json
-  {
-    "query": "Your query here",
-    "top_k": 5
-  }
-  ```
 
 ## Example Usage
 

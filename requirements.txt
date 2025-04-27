@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+requests
+beautifulsoup4
+sentence-transformers
+qdrant-client
+python-multipart
+semantic-text-splitter
+python-dotenv
+jinja2

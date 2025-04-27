@@ -1,0 +1,5 @@
+qdrant/data
+qdrant/*
+.env
+.venv
+__pycache__

@@ -182,22 +182,6 @@ curl -X POST "http://localhost:8000/retrieve" \
 
 ---
 
-## Dependencies
-
-- fastapi
-- uvicorn
-- python-dotenv
-- qdrant-client
-- sentence-transformers
-- semantic-text-splitter
-- requests
-- beautifulsoup4
-- jinja2
-
-(See `requirements.txt` for exact versions.)
-
----
-
 ## Embeding URLS (Team Workspace)
 
 ### embeding public url

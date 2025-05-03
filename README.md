@@ -209,8 +209,11 @@ for embeding public urls just put the url on the API embed or from the UI
 Embeding atlassian confluence workspace you need to know the ID and a personal api token as a password for confluence.
 
 using basic auth to the url 
-https://{confluence url}/wiki/api/v2/pages?id={page-id}&body-format=storage
+
+`https://{confluence url}/wiki/api/v2/pages?id={page-id}&body-format=storage`
+
 username : your email (usualy)
+
 password : personal api token [docs personal access token](https://developer.atlassian.com/server/jira/platform/personal-access-token/)
 
 put bthat on contextmore and your internal docs will be embeded
@@ -271,7 +274,7 @@ This project contextmore is licensed under the Apache License 2.0.
 This project includes software called contextmore
 developed by prima101112.
 
-i am happy if you retain this notice in any distribution or derivative works :).
+apreciate if you retain this notice in any distribution or derivative works :) but if not is ok.
 
 ---
 

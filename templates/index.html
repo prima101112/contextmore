@@ -1,24 +1,105 @@
 {% extends "base.html" %}
 
-{% block title %}Home - RAG Pipeline{% endblock %}
+{% block title %}Home - ContextMore{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow rounded-lg p-6">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">Welcome to Context More</h1>
-    <p class="text-gray-600 mb-4">This application allows you to:</p>
-    <ul class="list-disc list-inside text-gray-600 mb-6">
-        <li>Embed documents from URLs</li>
-        <li>Retrieve relevant information using semantic search powered by (qdrant, will be more in the future)</li>
-        <li>Using contextmore-mcp-server or qdrant-mcp-server to combine with your mcp clients (cursor/copilot/etc)</li>
-    </ul>
+<div class="max-w-3xl mx-auto">
+    <!-- Hero Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl mb-4">
+            Welcome to ContextMore
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            Enhance your applications with intelligent document search and retrieval capabilities.
+        </p>
+    </div>
+
+    <!-- Features Section -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-12">
+        <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+            <h2 class="text-lg font-semibold text-gray-900">Key Features</h2>
+        </div>
+        <div class="px-6 py-5">
+            <ul class="space-y-4">
+                <li class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        <span class="font-medium text-gray-900">Document Embedding:</span> 
+                        Easily add documents from URLs into your knowledge base with support for authentication
+                    </p>
+                </li>
+                <li class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        <span class="font-medium text-gray-900">Semantic Search:</span>
+                        Retrieve relevant information using advanced semantic search powered by Qdrant
+                    </p>
+                </li>
+                <li class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        <span class="font-medium text-gray-900">MCP Integration:</span>
+                        Seamlessly connect with your MCP clients including Cursor and Copilot
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Actions Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="/embed" class="block p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-            <h2 class="text-xl font-semibold text-blue-800 mb-2">Embed Documents</h2>
-            <p class="text-blue-600">Add new documents to the knowledge base by providing their URLs.</p>
+        <a href="/embed" class="group relative bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+            <div class="absolute inset-0 rounded-lg ring-1 ring-black ring-opacity-5"></div>
+            <div class="relative p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900">Embed Documents</h2>
+                </div>
+                <p class="text-gray-600">Add new documents to your knowledge base by providing their URLs. Supports both public and authenticated sources.</p>
+                <div class="mt-4 flex items-center text-blue-600 group-hover:text-blue-700">
+                    <span class="text-sm font-medium">Get started</span>
+                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
         </a>
-        <a href="/retrieve" class="block p-6 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-            <h2 class="text-xl font-semibold text-green-800 mb-2">Retrieve Information</h2>
-            <p class="text-green-600">Search through the knowledge base using natural language queries.</p>
+
+        <a href="/retrieve" class="group relative bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+            <div class="absolute inset-0 rounded-lg ring-1 ring-black ring-opacity-5"></div>
+            <div class="relative p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 group-hover:bg-green-100 transition-colors">
+                        <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900">Retrieve Information</h2>
+                </div>
+                <p class="text-gray-600">Search through your knowledge base using natural language queries. Get relevant results instantly.</p>
+                <div class="mt-4 flex items-center text-green-600 group-hover:text-green-700">
+                    <span class="text-sm font-medium">Start searching</span>
+                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
         </a>
     </div>
 </div>

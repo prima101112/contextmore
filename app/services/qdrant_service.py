@@ -30,7 +30,7 @@ class QdrantService:
                     must=[
                         models.FieldCondition(
                             key="url",
-                            match=models.MatchValue(value=url)
+                            match=models.MatchValue(value=str(url))
                         )
                     ]
                 ),

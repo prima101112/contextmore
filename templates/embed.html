@@ -1,71 +1,282 @@
 {% extends "base.html" %}
 
-{% block title %}Embed Documents - RAG Pipeline{% endblock %}
+{% block title %}Embed Document - ContextMore{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow rounded-lg p-6">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">Embed Documents</h1>
-    <form id="embedForm" class="space-y-4">
-        <div>
-            <label for="call_name" class="block text-sm font-medium text-gray-700 mb-1">Call Name</label>
-            <input type="text" id="call_name" name="call_name" required
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                   placeholder="Enter a name for this document collection">
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <!-- Header -->
+        <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+            <h1 class="text-xl font-semibold text-gray-900">Embed Document</h1>
+            <p class="mt-1 text-sm text-gray-500">Add a new document to your knowledge base by providing its URL.</p>
         </div>
-        <div>
-            <label for="url" class="block text-sm font-medium text-gray-700 mb-1">Document URL</label>
-            <input type="url" id="url" name="url" required
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                   placeholder="https://example.com/document">
+
+        <!-- Form -->
+        <div class="p-6">
+            <form id="embedForm" class="space-y-6">
+                <!-- URL Input -->
+                <div class="space-y-1">
+                    <label for="url" class="block text-sm font-medium text-gray-700">Document URL</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                        </div>
+                        <input type="url" name="url" id="url" required
+                            class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            placeholder="https://example.com/document">
+                    </div>
+                </div>
+
+                <!-- Call Name Input -->
+                <div class="space-y-1">
+                    <label for="call_name" class="block text-sm font-medium text-gray-700">Call Name</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="call_name" id="call_name" required
+                            class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            placeholder="A name to identify this document">
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">This name will help you identify the document in search results.</p>
+                </div>
+
+                <!-- Authentication Section -->
+                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-900">Authentication</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Required for protected documents</p>
+                        </div>
+                        <button type="button" id="toggleAuth" 
+                                class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Add Authentication
+                        </button>
+                    </div>
+
+                    <div id="authOptions" class="hidden space-y-4">
+                        <!-- Auth Type Selector -->
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">Authentication Type</label>
+                            <select id="authType" 
+                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option value="">None</option>
+                                <option value="basic">Basic Auth</option>
+                                <option value="header">Custom Headers</option>
+                            </select>
+                        </div>
+
+                        <!-- Basic Auth -->
+                        <div id="basicAuthFields" class="hidden space-y-4 bg-white rounded-md p-4 border border-gray-200">
+                            <div class="space-y-1">
+                                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                                <input type="text" id="username" name="username"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                <input type="password" id="password" name="password"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                        </div>
+
+                        <!-- Custom Headers -->
+                        <div id="headerFields" class="hidden space-y-4 bg-white rounded-md p-4 border border-gray-200">
+                            <div id="headersList" class="space-y-4">
+                                <div class="flex gap-4">
+                                    <div class="flex-1 space-y-1">
+                                        <label class="block text-sm font-medium text-gray-700">Header Name</label>
+                                        <input type="text" class="header-name block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                               placeholder="Authorization">
+                                    </div>
+                                    <div class="flex-1 space-y-1">
+                                        <label class="block text-sm font-medium text-gray-700">Value</label>
+                                        <input type="text" class="header-value block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                               placeholder="Bearer token123">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="addHeader"
+                                    class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add Header
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end">
+                    <button type="submit"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        Embed Document
+                    </button>
+                </div>
+            </form>
+
+            <!-- Result Display -->
+            <div id="result" class="mt-6 hidden">
+                <div class="rounded-md bg-gray-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0" id="resultIcon">
+                            <!-- Success/Error icon will be inserted here by JS -->
+                        </div>
+                        <div class="ml-3 w-full">
+                            <h3 class="text-sm font-medium text-gray-900" id="resultTitle">Result</h3>
+                            <div class="mt-2 text-sm text-gray-500">
+                                <pre id="resultContent" class="whitespace-pre-wrap font-mono bg-white rounded-md p-3 border border-gray-200 text-xs overflow-auto max-h-60"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button type="submit"
-                class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            Embed Document
-        </button>
-    </form>
-    <div id="result" class="mt-4"></div>
+    </div>
 </div>
 
 <script>
-document.getElementById('embedForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const call_name = document.getElementById('call_name').value;
-    const url = document.getElementById('url').value;
-    
-    try {
-        const response = await fetch('/embed', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ call_name, url }),
-        });
-        
-        const data = await response.json();
-        const resultDiv = document.getElementById('result');
-        
-        if (response.ok) {
-            resultDiv.innerHTML = `
-                <div class="p-4 bg-green-50 rounded-lg">
-                    <p class="text-green-800">Success! Document embedded successfully.</p>
-                    <p class="text-sm text-green-600 mt-2">Call Name: ${data.call_name}</p>
-                    <p class="text-sm text-green-600">Document ID: ${data.doc_id}</p>
-                </div>
-            `;
-        } else {
-            resultDiv.innerHTML = `
-                <div class="p-4 bg-red-50 rounded-lg">
-                    <p class="text-red-800">Error: ${data.detail}</p>
-                </div>
-            `;
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('embedForm');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const authOptions = document.getElementById('authOptions');
+    const authType = document.getElementById('authType');
+    const basicAuthFields = document.getElementById('basicAuthFields');
+    const headerFields = document.getElementById('headerFields');
+    const addHeaderBtn = document.getElementById('addHeader');
+    const headersList = document.getElementById('headersList');
+    const result = document.getElementById('result');
+    const resultContent = document.getElementById('resultContent');
+    const resultIcon = document.getElementById('resultIcon');
+    const resultTitle = document.getElementById('resultTitle');
+
+    // Toggle authentication options
+    toggleAuth.addEventListener('click', function() {
+        const isHidden = authOptions.classList.contains('hidden');
+        authOptions.classList.toggle('hidden');
+        toggleAuth.textContent = isHidden ? 'Remove Authentication' : 'Add Authentication';
+        if (!isHidden) {
+            authType.value = '';
+            basicAuthFields.classList.add('hidden');
+            headerFields.classList.add('hidden');
         }
-    } catch (error) {
-        document.getElementById('result').innerHTML = `
-            <div class="p-4 bg-red-50 rounded-lg">
-                <p class="text-red-800">Error: ${error.message}</p>
+    });
+
+    // Handle authentication type changes
+    authType.addEventListener('change', function() {
+        basicAuthFields.classList.add('hidden');
+        headerFields.classList.add('hidden');
+        
+        if (this.value === 'basic') {
+            basicAuthFields.classList.remove('hidden');
+        } else if (this.value === 'header') {
+            headerFields.classList.remove('hidden');
+        }
+    });
+
+    // Add new header fields
+    addHeaderBtn.addEventListener('click', function() {
+        const headerRow = document.createElement('div');
+        headerRow.className = 'flex gap-4 mt-4';
+        headerRow.innerHTML = `
+            <div class="flex-1 space-y-1">
+                <label class="block text-sm font-medium text-gray-700">Header Name</label>
+                <input type="text" class="header-name block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                       placeholder="Authorization">
+            </div>
+            <div class="flex-1 space-y-1">
+                <label class="block text-sm font-medium text-gray-700">Value</label>
+                <input type="text" class="header-value block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                       placeholder="Bearer token123">
             </div>
         `;
-    }
+        headersList.appendChild(headerRow);
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            url: document.getElementById('url').value,
+            call_name: document.getElementById('call_name').value
+        };
+
+        // Add authentication if enabled
+        if (!authOptions.classList.contains('hidden')) {
+            if (authType.value === 'basic') {
+                formData.basic_auth = {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                };
+            } else if (authType.value === 'header') {
+                const headers = {};
+                const headerRows = headersList.getElementsByClassName('flex');
+                for (const row of headerRows) {
+                    const name = row.querySelector('.header-name').value;
+                    const value = row.querySelector('.header-value').value;
+                    if (name && value) {
+                        headers[name] = value;
+                    }
+                }
+                if (Object.keys(headers).length > 0) {
+                    formData.auth_headers = { headers };
+                }
+            }
+        }
+
+        try {
+            const response = await fetch('/embed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            
+            result.classList.remove('hidden');
+            
+            if (!response.ok) {
+                throw new Error(data.detail || 'Failed to embed document');
+            }
+
+            // Show success state
+            resultIcon.innerHTML = `
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            `;
+            resultTitle.textContent = 'Success';
+            resultTitle.className = 'text-sm font-medium text-green-800';
+            resultContent.className = 'whitespace-pre-wrap font-mono bg-white rounded-md p-3 border border-gray-200 text-xs overflow-auto max-h-60';
+            resultContent.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            // Show error state
+            resultIcon.innerHTML = `
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            `;
+            resultTitle.textContent = 'Error';
+            resultTitle.className = 'text-sm font-medium text-red-800';
+            resultContent.className = 'whitespace-pre-wrap font-mono bg-white rounded-md p-3 border border-gray-200 text-xs overflow-auto max-h-60 text-red-600';
+            resultContent.textContent = error.message;
+        }
+    });
 });
 </script>
 {% endblock %} 

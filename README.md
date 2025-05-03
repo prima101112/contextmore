@@ -222,7 +222,7 @@ to use contextmore as mcp server once you deployed on local you could use as fol
 
 ### Screenshots example mcp call in cursor
 
-![ContextMore UI](static/contextmore-in-cursor.png)
+![ContextMore UI](https://raw.githubusercontent.com/prima101112/contextmore/main/static/contextmore-in-cursor.png)
 
 
 ## Deploying ContextMore as a Shared MCP Server for Your Organization

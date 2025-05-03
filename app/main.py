@@ -43,7 +43,7 @@ async def get_retrieve_page(request: Request):
         "year": datetime.now().year
     })
 
-@app.post("/embed")
+@app.post("/embed", operation_id="embed_document")
 async def embed_document(url_input: URLInput):
     # Check if URL already exists
     existing_doc_id = qdrant_service.get_existing_doc_id(url_input.url)
@@ -100,7 +100,7 @@ async def embed_document(url_input: URLInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-@app.post("/retrieve")
+@app.post("/retrieve" , operation_id="retrieve_documents")
 async def retrieve_documents(query_input: QueryInput):
     # Generate embedding for the query
     query_embedding = text_service.generate_embeddings([query_input.query])[0]
@@ -160,5 +160,11 @@ async def retrieve_documents(query_input: QueryInput):
         return {"results": results}
 
 # Mount MCP routes
-mcp = FastApiMCP(app)
+mcp = FastApiMCP(
+    app,
+    name="contextmore api mcp",
+    description="ContextMore is a tool that allows you to embed documents and search them using a vector database. It is designed to be used in conjunction with the ContextMore MCP server.",
+    include_operations=["embed_document", "retrieve_documents"],
+    include_tags=["embed", "retrieve", "contextmore"]
+)
 mcp.mount() 

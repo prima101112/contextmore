@@ -16,7 +16,7 @@ ContextMore is designed to solve this problem by providing a simple, centralized
 - **Semantic Retrieval**: Retrieve the most relevant document chunks or grouped documents based on a natural language query.
 - **Web UI**: User-friendly web interface for embedding and searching documents.
 - **API Access**: RESTful endpoints for programmatic access.
-- **MCP Server support*: Supporting mcp server using fastapi-mcp.
+- **MCP Server support**: Supporting mcp server using fastapi-mcp.
 
 ---
 
@@ -57,7 +57,7 @@ Create a `.env` file in the root directory:
 ```
 QDRANT_URL=localhost
 QDRANT_PORT=6333
-QDRANT_COLLECTION_NAME=documents
+QDRANT_COLLECTION_NAME=contextmore
 ```
 
 ### 5. Run Qdrant (Vector Database)
@@ -198,17 +198,6 @@ curl -X POST "http://localhost:8000/retrieve" \
 
 ---
 
-## License
-
-MIT
-
----
-
-**ContextMore** makes it easy to build your own knowledge base with semantic search and MCP ready, using only URLs and a vector database.
-For questions or contributions, please open an issue or pull request! 
-
----
-
 ## Embeding URLS (Team Workspace)
 
 ### embeding public url
@@ -227,3 +216,64 @@ password : personal api token [docs personal access token](https://developer.atl
 put bthat on contextmore and your internal docs will be embeded
 
 ### EMbeding Coda url
+
+TODO
+
+## Using as mcp server
+
+to use contextmore as mcp server once you deployed on local you could use as follows on your repected mcp clients 
+
+```
+{
+  "mcpServers": {
+    "contextmore": {
+      "url": "http://localhost:8000/mcp"
+    }
+  }
+}
+```
+
+### Screenshots example mcp call in cursor
+
+![ContextMore UI](static/contextmore-in-cursor.png)
+
+
+## Deploying ContextMore as a Shared MCP Server for Your Organization
+
+If you want everyone in your organization to use ContextMore as a centralized MCP server, follow these steps:
+
+1. **Deploy ContextMore on a Shared Server**
+   - Choose a reliable server (cloud VM, on-premise, or container platform) that is accessible to your organization.
+   - Run ContextMore using the instructions above (ensure Qdrant is also running and accessible).
+
+2. **Configure Network Access**
+   - Open the necessary ports (default: 8000 for ContextMore, 6333 for Qdrant) so users and MCP clients can reach the server.
+   - Use a reverse proxy (like Nginx or Traefik) for HTTPS and domain-based access (e.g., `https://contextmore.myorg.com`).
+
+3. **Secure the Deployment**
+   - Protect the API and web UI with authentication (e.g., VPN, SSO, or API keys) to prevent unauthorized access.
+   - Consider running ContextMore and Qdrant behind your organization's firewall or VPN.
+
+4. **Share the MCP Server Endpoint**
+   - Distribute the MCP server URL (e.g., `https://contextmore.myorg.com`) to your team.
+   - Users can add this endpoint to their MCP-compatible tools (like Cursor, Copilot, Claude Desktop, or custom clients).
+
+By deploying ContextMore as a shared MCP server, your entire organization can benefit from a unified, searchable, and extensible knowledge base accessible from any MCP-compatible tool.
+
+---
+
+## License
+
+This project contextmore is licensed under the Apache License 2.0.
+
+### NOTICE
+
+This project includes software called contextmore
+developed by prima101112.
+
+i am happy if you retain this notice in any distribution or derivative works :).
+
+---
+
+**ContextMore** makes it easy to build your own knowledge base with semantic search and MCP ready, using only URLs and a vector database.
+For questions or contributions, please open an issue or pull request! 

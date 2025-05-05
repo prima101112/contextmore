@@ -33,7 +33,7 @@ ContextMore is designed to solve this problem by providing a simple, centralized
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone git@github.com:prima101112/contextmore.git
 cd contextmore
 ```
 
@@ -73,6 +73,20 @@ Or manually:
 ```bash
 docker run -p 6333:6333 qdrant/qdrant
 ```
+
+---
+
+## Easiest Way to Start: Docker Compose
+
+The fastest way to get ContextMore and Qdrant running together is with Docker Compose. Just run:
+
+```bash
+docker-compose up -d
+```
+
+This will automatically start both services and set up persistent storage for Qdrant in the `qdrant/data` directory. Access ContextMore at [http://localhost:8000](http://localhost:8000).
+
+![ContextMore UI](https://raw.githubusercontent.com/prima101112/contextmore/main/static/contextmore-home.png)
 
 ---
 
